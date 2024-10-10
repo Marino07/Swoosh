@@ -1,6 +1,6 @@
-<nav x-data="{ open: false }" class="sm:sticky top-0 left-0 right-0 w-full bg-gradient-to-b from-black/80 to-black/0">
+<nav x-data="{ open: false }" class="sticky sm:relative top-0 left-0 right-0 w-full bg-gradient-to-b from-black/80 to-black/0">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-4  sm:px-2 lg:px-2">
+    <div class="max-w-7xl mx-4 sm:px-2 lg:px-2">
         <div class="flex justify-between h-16">
             <!-- Left Side (Logo and Navigation Links) -->
             <div class="flex items-center">
@@ -15,29 +15,26 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-4 md:flex">
-                    <x-nav-link class="text-white text-xl font-bold" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                    <x-nav-link class="text-white text-3xl font-black " :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link class="text-white text-xl font-bold" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                    <x-nav-link class="text-white text-3xl font-black" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Products') }}
                     </x-nav-link>
-                    <x-nav-link class="text-white text-xl font-bold" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Learn') }}
-                    </x-nav-link>
-                    <x-nav-link class="text-white text-xl font-bold" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                    <x-nav-link class="text-white text-3xl font-black" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Safety') }}
                     </x-nav-link>
-                    <x-nav-link class="text-white text-xl font-bold" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                    <x-nav-link class="text-white text-3xl font-black" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Support') }}
                     </x-nav-link>
-                    <x-nav-link class="text-white text-xl font-bold" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                    <x-nav-link class="text-white text-3xl font-black" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Download') }}
                     </x-nav-link>
-                    <div class="flex  justify-end !ml-[500px] pr-10 space-x-4"> <!-- Dodan ml-auto i pr-10 za desni razmak -->
-                        <button class="font-bold text-white text-xl">
+                    <div class="flex !ml-[300px] pr-10 space-x-4"> <!-- Dodan ml-auto i pr-10 za desni razmak -->
+                        <x-nav-link class="font-black text-3xl text-white " :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                             Language
-                        </button>
-                        <a class="rounded-xl bg-white px-5 py-2 flex items-center justify-center font-bold my-auto" href="{{ route('login') }}">
+                        </x-nav-link>
+                        <a class="rounded-xl text-xl bg-white px-6 py-1 flex items-center justify-center font-bold my-auto" href="{{ route('login') }}">
                             Login
                         </a>
                     </div>
@@ -88,7 +85,7 @@
         <!-- Responsive Settings Options -->
         <div class=" pt-4 pb-1 border-t border-gray-200">
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link class="text-black" :href="route('profile')" wire:navigate>
+                <x-responsive-nav-link class="text-" :href="route('profile')" wire:navigate>
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 
