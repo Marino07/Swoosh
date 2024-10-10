@@ -1,3 +1,17 @@
+<?php
+use App\Livewire\Actions\Logout;
+use Livewire\Volt\Component;
+new class extends Component
+{
+    /**
+     * Log the current user out of the application.
+     */
+    public function logout(Logout $logout): void
+    {
+        $logout();
+        $this->redirect('/', navigate: true);
+    }
+}; ?>
 <nav x-data="{ open: false }" class="sticky sm:relative top-0 left-0 right-0 w-full bg-gradient-to-b from-black/80 to-black/0">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-4 sm:px-2 lg:px-2">
@@ -30,10 +44,11 @@
                     <x-nav-link class="text-white text-3xl font-black" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Download') }}
                     </x-nav-link>
+                    <x-nav-link class="font-black text-3xl text-white " :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                        Language
+                    </x-nav-link>
                     <div class="flex !ml-[300px] pr-10 space-x-4"> <!-- Dodan ml-auto i pr-10 za desni razmak -->
-                        <x-nav-link class="font-black text-3xl text-white " :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                            Language
-                        </x-nav-link>
+
                         <a class="rounded-xl text-xl bg-white px-6 py-1 flex items-center justify-center font-bold my-auto" href="{{ route('login') }}">
                             Login
                         </a>

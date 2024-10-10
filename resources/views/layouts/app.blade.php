@@ -17,24 +17,109 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @livewireStyles
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('livewire.layout.navigation')
+    <body class="font-sans antialiased flex flex-col h-screen">
+        <div class="flex flex-1 overflow-hidden">
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
+            <!-- Sidebar: visible on large screens, hidden on small screens -->
+            <aside class=" md:flex flex-col bg-gray-100 sm:w-[22rem] w-full">
+                <header class="bg-tinder py-5 flex items-center p-2.5 sticky top-0">
+                    {{--Avatar --}}
+                    <x-avatar class="w-10 h-10"></x-avatar>
+                    <div class="ml-auto flex items-center gap-3">
+                        <span class="bg-black/40 p-2.5 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suitcase-lg-fill text-white" viewBox="0 0 16 16">
+                                <path d="M7 0a2 2 0 0 0-2 2H1.5A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14H2a.5.5 0 0 0 1 0h10a.5.5 0 0 0 1 0h.5a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2H11a2 2 0 0 0-2-2zM6 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1zM3 13V3h1v10zm9 0V3h1v10z"/>
+                              </svg>
+                        </span>
+                        <span class="bg-black/40 p-2.5 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-fill text-white" viewBox="0 0 16 16">
+                                <path d="M5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/>
+                              </svg>
+                        </span>
                     </div>
+
                 </header>
-            @endif
+                {{--Tabs section --}}
+                <section
+                x-data="{ tab: '2' }"
+                class="mb-auto overflow-y-auto overflow-x-scroll relative">
+
+                <!-- Header with buttons to switch between tabs -->
+                <header class="flex items-center gap-5 mb-2 p-4 sticky top-0 bg-white z-10">
+
+                    <!-- Button for the "Matches" tab -->
+                    <button
+                        @click="tab = '1'"
+                        :class="{ 'border-b-2 border-red-500' : tab === '1' }"
+                        class="font-bold text-sm px-2 pb-1.5">
+                        Matches
+                        <span class="rounded-full text-xs p-1 px-2 font-bold text-white bg-tinder">
+                            12
+                        </span>
+                    </button>
+
+                    <!-- Button for the "Chats" tab -->
+                    <button
+                        @click="tab = '2'"
+                        :class="{ 'border-b-2 border-red-500' : tab === '2' }"
+                        class="font-bold text-sm px-2 pb-1.5">
+                        Chats
+                        <span class="rounded-full text-xs p-1 px-2 font-bold text-white bg-tinder">
+                            5
+                        </span>
+                    </button>
+
+                </header>
+                {{--matches --}}
+                <aside class="px-2" x-show="tab=='1'">
+                    <div class="grid grid-cols-3 gap-2">
+                        @for ($i=0; $i < 11; $i++)
+                        <div class="relative">
+                            <!-- SVG ikona pozicionirana na gornjoj desnoj ivici slike -->
+                            <span class="absolute -top-7 -right-7 ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot text-red-500 w-16 h-16" viewBox="0 0 16 16">
+                                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                                </svg>
+                            </span>
+                            <img src="https://randomuser.me/api/portraits/women/{{$i+20}}.jpg" alt="Random face" class="h-36 rounded-lg object-cover">
+                            <h5 class="absolute rounded-lg bottom-2 left-2 text-white font-bold text-xs">
+                                {{ fake()->firstname }}
+                            </h5>
+                        </div>
+
+                        @endfor
+
+                    </div>
+                </aside>
+
+
+
+
+
+
+
+            </section>
+
+                <!-- Sidebar content goes here -->
+            </aside>
 
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
+            <main class="hidden flex-1 flex-col overflow-y-auto p-5 md:flex">
+                <!-- "You're logged in" or other main content -->
+                <div class="block md:hidden text-center text-2xl font-semibold">
+                    You're logged in
+                </div>
+
+                <!-- Slot content that will appear on larger screens -->
+                <div class="hidden md:block">
+                    {{ $slot }}
+                </div>
             </main>
         </div>
+
+        <!-- Scripts -->
+        @livewireScripts
     </body>
 </html>
