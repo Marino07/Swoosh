@@ -1,64 +1,147 @@
 <div class="m-auto md:p-10 w-full h-full relative">
     <div class="relative h-full md:h-[600px] w-full md:w-96 m-auto">
-        <div x-data="{
+        @for ($i=0; $i<4; $i++)
+
+        <div  x-data="{
             isSwiping: false,
-            isSwipingLeft: false,
-            isSwipingRight: false,
-            isSwipingUp: false
-        }"
-        x-init = "
-        element = $el;
-        {{-- Initialize Hammerjs --}}
-        var hammertime = new Hammer(element);
-        {{-- let pan support all directions --}}
-        hammertime.get('pan').set({
-            direction: Hammer.DIRECTION_ALL,
-            touchAction:'pan'
-        });
+            swipingLeft: false,
+            swipingRight: false,
+            swipingUp: false
+            }"
 
-        {{-- On pan --}}
+            x-init="
+            element = $el;
 
-        hammertime.on('pan',function(event){
+            {{-- Initialize hammer js on current element --}}
+            var hammertime = new Hammer(element);
 
-            isSwiping = true;
-            if(event.deltaX===0) return;
-            if(event.center.x === 0 && event.center.y === 0) return;
+            {{-- let the pan gesture support all directions. --}}
+            hammertime.get('pan').set({
+              direction   : Hammer.DIRECTION_ALL,
+              touchAction: 'pan'
+          });
 
-            {{-- Swiped Right --}}
-            if(event.deltaX > 20){
-                isSwipingRight = true;
-                isSwipingLeft = false;
-                isSwipingUp = false;
+            {{-- ON PAN --}}
+            hammertime.on('pan', function (event) {
 
-            }
-            {{-- Swiped Left --}}
-            else if(event.deltaX < -20){
-                 isSwipingRight = false;
-                isSwipingLeft = true;
-                isSwipingUp = false;
-            }
-            {{-- Swiped UP SUPERLIKE --}}
+                    isSwiping= true;
+                    if (event.deltaX === 0) return;
+                    if (event.center.x === 0 && event.center.y === 0) return;
 
-            else if (event.deltaY < -50 && Math.abs(event.deltaX )< 20){
+                    {{-- Swiped Right --}}
+                    if ( event.deltaX > 20) {
 
-                isSwipingRight = false;
-                isSwipingLeft = false;
-                isSwipingUp = true;
-            }
-            {{--Rorate --}}
-            var rotate = event.deltaX/10;
-            {{-- Apply transformation to rotate only in X dir  --}}
+                      swipingRight=true;//true
+                      swipingLeft=false;
+                      swipingUp=false;
 
-            event.target.style.transform = 'translate('+ event.deltaX + 'px,' + event.deltaY + 'px) rotate('+rotate+ 'deg';
+                    }
+                    {{-- Swiped Left --}}
+                    else if (event.deltaX < -20) {
 
-        });
+                      swipingLeft=true;//true
+                      swipingRight=false;
+                      swipingUp=false;
+
+                    }
+                    {{-- Super like feature --}}
+                    else if (event.deltaY < -50 && Math.abs(event.deltaX) < 20 ) {
+                      swipingUp=true;//true
+                      swipingRight=false;
+                      swipingLeft=false;
+                    }
+
+                    {{-- roate deg --}}
+                    var rotate = event.deltaX/10;
+
+                    {{--  Scroll effect along the Y-axis (upward scroll) --}}
+
+                    {{-- Apply the transformation to rotate only in X direction in Clockwise and Anti-Clockwise by 10deg --}}
+                    event.target.style.transform = 'translate(' + event.deltaX + 'px, ' + event.deltaY + 'px) rotate(' + rotate + 'deg)';
+
+            });
+
+
+            {{-- ON PANEND --}}
+            hammertime.on('panend', function (event) {
+
+              {{-- reset states --}}
+              isSwiping =false;
+              swipingLeft=false;
+              swipingRight = false;
+              swipingUp=false;
+
+
+              {{-- Set thresholds for horizontal and vertical distances px --}}
+              var horizontalThreshold = 200;
+              var verticalThreshold = 200;
+
+              {{-- Set thresholds for horizontal and vertical velocities --}}
+              var velocityXThreshold = 0.5;
+              var velocityYThreshold = 0.5;
+
+              {{-- Check if the swipe distance and velocity are below the thresholds
+                  for both horizontal and vertical directions --}}
+              var keep = Math.abs(event.deltaX) < horizontalThreshold && Math.abs(event.velocityX) < velocityXThreshold &&
+                          Math.abs(event.deltaY) < verticalThreshold && Math.abs(event.velocityY) < velocityYThreshold;
+
+              if (keep) {
+
+                {{-- Adjust the duration and timing function as needed --}}
+                event.target.style.transition = 'transform 0.3s ease-in-out';
+                event.target.style.transform = '';
+                $el.style.transform = '';
+
+                {{-- Clear the transition property after the animation completes --}}
+                setTimeout(() => {
+                  event.target.style.transition = '';
+                  event.target.style.transform = '';
+                  $el.style.transform = '';
+                }, 300); // Use the same duration as the transition
+
+              } else {
+
+                var moveOutWidth = document.body.clientWidth;
+                var moveOutHeight  = document.body.clientHeight;
+
+
+                {{-- Decide to push left or right or up --}}
+
+                {{-- SwipeRight --}}
+                if (event.deltaX > 20) {
+                    {{-- Adjust the transform as needed --}}
+                  event.target.style.transform = 'translate(' + moveOutWidth + 'px, 10px)';
+                  $dispatch('swipedright');
+                }
+
+                {{--Swipeleft  --}}
+                else if (event.deltaX <-20)  {
+                  $dispatch('swipedleft');
+                  event.target.style.transform = 'translate(' + -moveOutWidth + 'px, 10px)';
+
+                }
+
+                {{-- Super like feature --}}
+                else if (event.deltaY < -50 && Math.abs(event.deltaX) < 20 ) {
+
+                $dispatch('swipedup');
+                event.target.style.transform = 'translate(0px, ' + -moveOutHeight + 'px)';
+
+                }
+
+                {{-- remove element & draggged element from the DOM --}}
+                event.target.remove();
+                $el.remove();
+              }
+
+            });
         "
         :class="{'transform-none cursor-grap' : isSwiping}"
-        class="absolute inset-0 m-auto transform ease-out duration-300 rounded-xl bg-gray-500 cursor-pointer">
+        class="absolute inset-0 m-auto transform ease-out duration-300 rounded-xl  cursor-pointer">
             <div class="h-full w-full">
 
                 <div
-                style="background-image: url('https://randomuser.me/api/portraits/women/18.jpg')"
+                style="background-image: url('https://randomuser.me/api/portraits/women/{{$i+13}}.jpg')"
                 class="relative overflow-hidden w-full h-full rounded-xl bg-cover">
 
                 {{-- Swiper indicators --}}
@@ -67,21 +150,21 @@
                     <!-- LIKE Indicator -->
                     <span
                     x-cloak
-                    x-show="isSwipingRight"
+                    x-show="swipingLeft"
                     class="border-2 rounded-md p-1 px-1 border-green-500 text-green-500 text-4xl capitalize font-extrabold top-10 left-5 -rotate-12 absolute z-5">
                         LIKE
                     </span>
                     <!-- NOPE Indicator -->
                     <span
                     x-cloak
-                     x-show="isSwipingLeft"
+                     x-show="swipingRight"
                     class="border-2 rounded-md p-1 px-1 border-red-500 text-red-500 text-4xl capitalize font-extrabold top-10 right-5 rotate-12 absolute z-5">
                         NOPE
                     </span>
                     <!-- SUPER LIKE Indicator -->
                     <span
                     x-cloak
-                     x-show="isSwipingUp"
+                     x-show="swipingUp"
                     class="border-2 rounded-md p-1 px-1 border-yellow-500 text-yellow-500 text-4xl capitalize font-extrabold mx-auto  bottom-48 max-w-fit inset-x-0 -rotate-12 absolute z-5">
                         SUPER LIKE
                     </span>
@@ -169,5 +252,6 @@
             </div>
 
         </div>
+        @endfor
     </div>
 </div>
