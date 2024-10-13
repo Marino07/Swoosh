@@ -47,12 +47,14 @@ new class extends Component
                     <x-nav-link class="font-black text-3xl text-white " :href="route('app')" :active="request()->routeIs('app')" wire:navigate>
                         Language
                     </x-nav-link>
+                    @guest
                     <div class="flex !ml-[300px] pr-10 space-x-4"> <!-- Dodan ml-auto i pr-10 za desni razmak -->
 
                         <a class="rounded-xl text-xl bg-white px-6 py-1 flex items-center justify-center font-bold my-auto" href="{{ route('login') }}">
                             Login
                         </a>
                     </div>
+                    @endguest
                      <!-- Hamburger -->
                 </div>
                 <div class="-me-2 flex  items-center sm:hidden">

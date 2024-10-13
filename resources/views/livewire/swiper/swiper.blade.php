@@ -6,6 +6,53 @@
             isSwipingRight: false,
             isSwipingUp: false
         }"
+        x-init = "
+        element = $el;
+        {{-- Initialize Hammerjs --}}
+        var hammertime = new Hammer(element);
+        {{-- let pan support all directions --}}
+        hammertime.get('pan').set({
+            direction: Hammer.DIRECTION_ALL,
+            touchAction:'pan'
+        });
+
+        {{-- On pan --}}
+
+        hammertime.on('pan',function(event){
+
+            isSwiping = true;
+            if(event.deltaX===0) return;
+            if(event.center.x === 0 && event.center.y === 0) return;
+
+            {{-- Swiped Right --}}
+            if(event.deltaX > 20){
+                isSwipingRight = true;
+                isSwipingLeft = false;
+                isSwipingUp = false;
+
+            }
+            {{-- Swiped Left --}}
+            else if(event.deltaX < -20){
+                 isSwipingRight = false;
+                isSwipingLeft = true;
+                isSwipingUp = false;
+            }
+            {{-- Swiped UP SUPERLIKE --}}
+
+            else if (event.deltaY < -50 && Math.abs(event.deltaX )< 20){
+
+                isSwipingRight = false;
+                isSwipingLeft = false;
+                isSwipingUp = true;
+            }
+            {{--Rorate --}}
+            var rotate = event.deltaX/10;
+            {{-- Apply transformation to rotate only in X dir  --}}
+
+            event.target.style.transform = 'translate('+ event.deltaX + 'px,' + event.deltaY + 'px) rotate('+rotate+ 'deg';
+
+        });
+        "
         :class="{'transform-none cursor-grap' : isSwiping}"
         class="absolute inset-0 m-auto transform ease-out duration-300 rounded-xl bg-gray-500 cursor-pointer">
             <div class="h-full w-full">

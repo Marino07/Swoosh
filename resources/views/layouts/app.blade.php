@@ -122,7 +122,6 @@
                     </ul>
                 </aside>
 
-
                 {{--Messages --}}
                 <aside class="px-2" x-show="tab=='1'">
                     <div class="grid grid-cols-3 gap-2">
