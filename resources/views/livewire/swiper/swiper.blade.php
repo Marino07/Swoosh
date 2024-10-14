@@ -2,11 +2,69 @@
     <div class="relative h-full md:h-[600px] w-full md:w-96 m-auto">
         @for ($i=0; $i<4; $i++)
 
-        <div  x-data="{
+        <div
+
+        @swipedright.fun="console.log('Success')"
+        @swipedup.fun="console.log('nice')"
+        @swipedleft.fun="console.log('ok')"
+        x-data="{
             isSwiping: false,
             swipingLeft: false,
             swipingRight: false,
-            swipingUp: false
+            swipingUp: false,
+            {{--swipe right --}}
+            swipeRight: function(){
+                moveOutWidth = document.body.clientWidth *1.5;
+                $el.style.transition = 'transform 0.3s ease-in-out';
+
+
+                $el.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-30deg)';
+
+
+                setTimeout(()=> {
+                    $el.remove();
+                },300);
+
+                {{-- dispatch --}}
+
+                $dispatch('swipedright');
+            },
+            {{--swipe left --}}
+             swipeLeft: function(){
+                moveOutWidth = document.body.clientWidth *1.5;
+
+                $el.style.transition = 'transform 0.3s ease-in-out';
+
+
+                $el.style.transform = 'translate(' + -moveOutWidth + 'px, -100px) rotate(-30deg)';
+
+
+                setTimeout(()=> {
+                    $el.remove();
+                },300);
+
+                {{-- dispatch --}}
+
+                $dispatch('swipedleft');
+            },
+            {{-- swipe up --}}
+
+             swipeUp: function(){
+                moveOutHeight = document.body.clientHeight *1.5;
+                $el.style.transition = 'transform 0.3s ease-in-out';
+
+
+                $el.style.transform = 'translate(0px, ' + -moveOutHeight + 'px) rotate(-20deg)';
+
+
+                setTimeout(()=> {
+                    $el.remove();
+                },300);
+
+                {{-- dispatch --}}
+
+                $dispatch('swipedup');
+            }
             }"
 
             x-init="
@@ -198,7 +256,9 @@
                         <div class="grid grid-cols-5 gap-1 items-center mt-auto">
                             {{-- Swipe left --}}
                             <div class="group flex space-x-2">
-                                <button draggable="false" class="rounded-full border-2 pointer-events-auto border-yellow-600 p-3 shrink-0 max-w-fit flex items-center text-yellow-600">
+                                <button draggable="false"
+                                @click="swipeLeft()"
+                                class="rounded-full border-2 pointer-events-auto border-yellow-600 p-3 shrink-0 max-w-fit flex items-center text-yellow-600">
                                     <svg
                                     stroke-width="3"
                                     stroke="currentColor"
@@ -207,7 +267,8 @@
                                     </svg>
                                 </button>
 
-                                <button draggable="false" class="rounded-full border-2 pointer-events-auto border-red-600 p-3 shrink-0 max-w-fit flex items-center text-red-600">
+                                <button draggable="false"
+                                class="rounded-full border-2 pointer-events-auto border-red-600 p-3 shrink-0 max-w-fit flex items-center text-red-600">
                                     <svg
                                     stroke-width="3"
                                     stroke="currentColor"
@@ -216,7 +277,9 @@
                                     </svg>
                                 </button>
 
-                                <button draggable="false" class="rounded-full border-2 pointer-events-auto border-cyan-600 p-3 shrink-0 max-w-fit flex items-center text-cyan-600">
+                                <button
+                                @click="swipeUp()"
+                                draggable="false" class="rounded-full border-2 pointer-events-auto border-cyan-600 p-3 shrink-0 max-w-fit flex items-center text-cyan-600">
                                     <svg
                                     stroke-width="3"
                                     stroke="currentColor"
@@ -225,7 +288,9 @@
                                     </svg>
                                 </button>
 
-                                <button draggable="false" class="rounded-full border-2 pointer-events-auto border-green-600 p-3 shrink-0 max-w-fit flex items-center text-green-600">
+                                <button draggable="false"
+                                @click="swipeRight()"
+                                class="rounded-full border-2 pointer-events-auto border-green-600 p-3 shrink-0 max-w-fit flex items-center text-green-600">
                                     <svg
                                     stroke-width="3"
                                     stroke="currentColor"
