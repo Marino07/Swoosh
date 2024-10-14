@@ -196,13 +196,80 @@
         "
         :class="{'transform-none cursor-grap' : isSwiping}"
         class="absolute inset-0 m-auto transform ease-out duration-300 rounded-xl  cursor-pointer">
-            <div class="h-full w-full">
-
                 <div
-                style="background-image: url('https://randomuser.me/api/portraits/women/{{$i+13}}.jpg')"
-                class="relative overflow-hidden w-full h-full rounded-xl bg-cover">
+                class="relative overflow-hidden w-full h-full rounded-xl bg-cover bg-white">
 
-                {{-- Swiper indicators --}}
+
+                @php
+                $slides = ['https://randomuser.me/api/portraits/women/' . rand(1,20) . '.jpg' ,
+                 'https://randomuser.me/api/portraits/women/' . rand(1,20) . '.jpg' ,
+                  'https://randomuser.me/api/portraits/women/' . rand(1,20) . '.jpg' , ];
+                @endphp
+
+                {{-- Carousel Section --}}
+
+                <section x-data="{activeSlide:1, slides:@js($slides) }">
+
+
+                    {{--slides --}}
+
+                    <template x-for="(image,index) in slides" :key=index>
+
+                        <img x-show="activeSlide === index + 1" :src="image" alt="image" class="absolute inset-0 pointer-events-none w-full h-full object-cover">
+
+                    </template>
+
+                    {{-- pagination --}}
+
+                    <div
+                    :class="{'hidden':slides.length == 1}"
+
+                    class="absolute top-1 inset-x-0 z-10 w-full flex items-center justify-center">
+
+                        <template x-for="(image,index) in slides" :key="index">
+
+                            <button
+                            @click = "activeSlide = index + 1"
+                            :class="{'bg-white':activeSlide === index + 1, 'bg-gray-500' : activeSlide !== index + 1}"
+                            class="flex-1 w-4 h-2 mx-1 rounded-full overflow-hidden">
+
+                        </button>
+                        </template>
+                    </div>
+
+                    {{-- Previous button --}}
+
+                        <button
+                        draggable="true"
+                         @click="activeSlide = activeSlide === 1 ? slides.length : activeSlide - 1"
+                        class="absolute left-2 top-1/2 transform -translate-y-1/2 z-30">
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-6 h-6 text-white">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                      </svg>
+
+
+                    </button>
+
+                    {{-- Next button --}}
+
+                    <button
+                    draggable="true"
+                    @click="activeSlide = activeSlide === slides.length ? 1 : activeSlide + 1"
+                   class="absolute right-2 top-1/2 transform -translate-y-1/2 z-30">
+
+
+                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-6 h-6 text-white">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                  </svg>
+
+               </button>
+
+
+
+
+                </section>
 
                 <div class="pointer-events-none">
                     <!-- LIKE Indicator -->
@@ -241,7 +308,9 @@
                                 </p>
                             </div>
                             <div class="col-span-2 justify-end flex pointer-events-auto">
-                                <button>
+                                <button
+                                  draggable="true"
+                                >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
                                       </svg>
@@ -256,7 +325,7 @@
                         <div class="grid grid-cols-5 gap-1 items-center mt-auto">
                             {{-- Swipe left --}}
                             <div class="group flex space-x-2">
-                                <button draggable="false"
+                                <button draggable="true"
                                 @click="swipeLeft()"
                                 class="rounded-full border-2 pointer-events-auto border-yellow-600 p-3 shrink-0 max-w-fit flex items-center text-yellow-600">
                                     <svg
@@ -267,7 +336,7 @@
                                     </svg>
                                 </button>
 
-                                <button draggable="false"
+                                <button draggable="true"
                                 class="rounded-full border-2 pointer-events-auto border-red-600 p-3 shrink-0 max-w-fit flex items-center text-red-600">
                                     <svg
                                     stroke-width="3"
@@ -279,7 +348,7 @@
 
                                 <button
                                 @click="swipeUp()"
-                                draggable="false" class="rounded-full border-2 pointer-events-auto border-cyan-600 p-3 shrink-0 max-w-fit flex items-center text-cyan-600">
+                                draggable="true" class="rounded-full border-2 pointer-events-auto border-cyan-600 p-3 shrink-0 max-w-fit flex items-center text-cyan-600">
                                     <svg
                                     stroke-width="3"
                                     stroke="currentColor"
@@ -288,7 +357,7 @@
                                     </svg>
                                 </button>
 
-                                <button draggable="false"
+                                <button draggable="true"
                                 @click="swipeRight()"
                                 class="rounded-full border-2 pointer-events-auto border-green-600 p-3 shrink-0 max-w-fit flex items-center text-green-600">
                                     <svg
@@ -299,7 +368,7 @@
                                     </svg>
                                 </button>
 
-                                <button draggable="false" class="rounded-full border-2 pointer-events-auto border-purple-600 p-3 shrink-0 max-w-fit flex items-center text-purple-600">
+                                <button draggable="true" class="rounded-full border-2 pointer-events-auto border-purple-600 p-3 shrink-0 max-w-fit flex items-center text-purple-600">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-9 h-9 shrink-0 m-auto group-hover:scale-105 transition-transform strok-2 ">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
                                     </svg>
@@ -314,7 +383,6 @@
                 </section>
 
                 </div>
-            </div>
 
         </div>
         @endfor
