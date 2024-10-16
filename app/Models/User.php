@@ -4,12 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Language;
 use App\Enums\BasicGroupEnum;
+use Laravel\Sanctum\HasApiTokens;
 use App\Enums\RelationshipGoalsEnum;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -70,5 +72,9 @@ class User extends Authenticatable
     function basics()  {
         return $this->belongsToMany(Basic::class,'basic_user');
 
+    }
+
+    public function languages() : BelongsToMany{
+        return $this->belongsToMany(Language::class,'language_user');
     }
 }
