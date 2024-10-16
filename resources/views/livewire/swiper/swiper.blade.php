@@ -216,11 +216,11 @@
              @endphp
 
                 {{-- Carousel section --}}
-                <section x-data="{activeSlide:1, slides:@js($slides)}">
+                <section x-data="{activeSlide:0, slides:@js($slides)}">
 
                     {{-- Slides --}}
                     <template x-for="(image,index) in slides" :key="index">
-                        <img x-show="activeSlide===index + 1" :src="image" alt="image"
+                        <img x-show="activeSlide===index" :src="image" alt="image"
                             class="absolute inset-0 pointer-events-none w-full h-full object-cover">
 
                     </template>
@@ -233,8 +233,8 @@
 
                         <template x-for="(image,index) in slides" :key="index">
 
-                            <button @click="activeSlide=index+1"
-                                :class="{'bg-white':activeSlide===index +1,'bg-gray-500':activeSlide !== index+1}"
+                            <button @click="activeSlide=index"
+                                :class="{'bg-white':activeSlide===index,'bg-gray-500':activeSlide !== index}"
                                 class="flex-1 w-4 h-2 mx-1 rounded-full overflow-hidden">
 
                             </button>

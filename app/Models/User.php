@@ -3,21 +3,23 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\BasicGroupEnum;
 use App\Enums\RelationshipGoalsEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use  HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-
     protected $guarded = [];
 
     /**
@@ -31,16 +33,42 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'relationship_goals'=>RelationshipGoalsEnum::class
+    ];
+
+
+      /**
+     * BOOT
+     * Listen to events and do actions
+     */
+    protected static function boot()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'relationship_goals' => RelationshipGoalsEnum::class,
-        ];
+        parent::boot();
+
+        static::created(function ($user) {
+            $basics = Basic::all();
+
+            //wants to have children
+            $basic= $basics->where('group',BasicGroupEnum::children)->all() ;
+            $user->basics()->attach([1,7,8]);
+
+            //zodiac
+            $basic= $basics->where('group',BasicGroupEnum::zodiac)->first() ;
+            $user->basics()->attach($basic);
+
+        });
+    }
+
+
+    function basics()  {
+        return $this->belongsToMany(Basic::class,'basic_user');
+
     }
 }
