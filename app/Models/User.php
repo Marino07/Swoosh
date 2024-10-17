@@ -65,6 +65,11 @@ class User extends Authenticatable
             $basic= $basics->where('group',BasicGroupEnum::zodiac)->first() ;
             $user->basics()->attach($basic);
 
+
+            $user->lifestyles()->attach([1,2,3]);
+
+
+
         });
     }
 
@@ -76,5 +81,8 @@ class User extends Authenticatable
 
     public function languages() : BelongsToMany{
         return $this->belongsToMany(Language::class,'language_user');
+    }
+    public function lifestyles():BelongsToMany{
+        return $this->belongsToMany(Lifestyle::class,'lifestyle_user');
     }
 }
