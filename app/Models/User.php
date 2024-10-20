@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Models\Language;
 use App\Enums\BasicGroupEnum;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
 use App\Enums\RelationshipGoalsEnum;
 use Illuminate\Notifications\Notifiable;
@@ -66,7 +67,7 @@ class User extends Authenticatable
             $user->basics()->attach($basic);
 
 
-            $user->lifestyles()->attach([1,2,3]);
+            $user->lifestyles()->attach([rand(1,3)]);
 
 
 
@@ -85,4 +86,29 @@ class User extends Authenticatable
     public function lifestyles():BelongsToMany{
         return $this->belongsToMany(Lifestyle::class,'lifestyle_user');
     }
+    public function swipes(): HasMany{
+        return $this->hasMany(Swipe::class,'user_id');
+    }
+
+    function hasSwiped(User $user, $type=null) : bool {
+        $query = $this->swipes()->where('swiped_user_id',$user);
+
+        if($type != null){
+            $query->where('type',$type);
+        }
+        return $query->exists();
+    }
+
+    //exclude users who has alreafy been swiped by the auth user
+    public function scopeWhereNotSwiped($query) {
+
+        return $query->whereNotIn('id',function($subquery){
+            $subquery->select('swiped_user_id')
+            ->from('swipes')
+            ->where('user_id',auth()->id());
+        });
+
+
+    }
+
 }
