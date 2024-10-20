@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
-    use  HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -43,11 +43,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'relationship_goals'=>RelationshipGoalsEnum::class
+        'relationship_goals' => RelationshipGoalsEnum::class
     ];
 
 
-      /**
+    /**
      * BOOT
      * Listen to events and do actions
      */
@@ -59,15 +59,15 @@ class User extends Authenticatable
             $basics = Basic::all();
 
             //wants to have children
-            $basic= $basics->where('group',BasicGroupEnum::children)->all() ;
-            $user->basics()->attach([1,7,8]);
+            $basic = $basics->where('group', BasicGroupEnum::children)->all();
+            $user->basics()->attach([1, 7, 8]);
 
             //zodiac
-            $basic= $basics->where('group',BasicGroupEnum::zodiac)->first() ;
+            $basic = $basics->where('group', BasicGroupEnum::zodiac)->first();
             $user->basics()->attach($basic);
 
 
-            $user->lifestyles()->attach([rand(1,3)]);
+            $user->lifestyles()->attach([rand(1, 3)]);
 
 
 
@@ -75,40 +75,59 @@ class User extends Authenticatable
     }
 
 
-    function basics()  {
-        return $this->belongsToMany(Basic::class,'basic_user');
+    function basics()
+    {
+        return $this->belongsToMany(Basic::class, 'basic_user');
 
     }
 
-    public function languages() : BelongsToMany{
-        return $this->belongsToMany(Language::class,'language_user');
+    public function languages(): BelongsToMany
+    {
+        return $this->belongsToMany(Language::class, 'language_user');
     }
-    public function lifestyles():BelongsToMany{
-        return $this->belongsToMany(Lifestyle::class,'lifestyle_user');
+    public function lifestyles(): BelongsToMany
+    {
+        return $this->belongsToMany(Lifestyle::class, 'lifestyle_user');
     }
-    public function swipes(): HasMany{
-        return $this->hasMany(Swipe::class,'user_id');
+    public function swipes(): HasMany
+    {
+        return $this->hasMany(Swipe::class, 'user_id');
     }
 
-    function hasSwiped(User $user, $type=null) : bool {
-        $query = $this->swipes()->where('swiped_user_id',$user);
+    function hasSwiped(User $user, $type = null): bool
+    {
+        $query = $this->swipes()->where('swiped_user_id', $user);
 
-        if($type != null){
-            $query->where('type',$type);
+        if ($type != null) {
+            $query->where('type', $type);
         }
         return $query->exists();
     }
 
     //exclude users who has alreafy been swiped by the auth user
-    public function scopeWhereNotSwiped($query) {
+    public function scopeWhereNotSwiped($query)
+    {
 
-        return $query->whereNotIn('id',function($subquery){
+        return $query->whereNotIn('id', function ($subquery) {
             $subquery->select('swiped_user_id')
-            ->from('swipes')
-            ->where('user_id',auth()->id());
+                ->from('swipes')
+                ->where('user_id', auth()->id());
         });
 
+    }
 
+    public function matches()
+    {
+        return $this->hasManyThrough(
+            Swipe::class,
+            Swipe::class,
+            'user_id',
+            'swipe_id_1',
+            'id',
+            'id'
+        )->orWhereHas('swipe2', function ($query) {
+            $query->where('user_id', $this->id);
+        });
     }
 
 }

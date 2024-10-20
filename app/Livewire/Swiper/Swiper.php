@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Swiper;
 
+use App\Models\SwipeMatch;
 use App\Models\User;
 use App\Models\Swipe;
 use Livewire\Component;
@@ -41,11 +42,35 @@ class Swiper extends Component
             return null;
         }
 
-        Swipe::create([
+        $swipe = Swipe::create([
             'user_id' => auth()->id(),
             'swiped_user_id' => $user->id,
             'type' => $type
         ]);
+
+        //check if type is superlike or swipe right
+
+        if($type =='up' || $type == 'right'){
+            $authUserId = auth()->id();
+            $swipedUserId = $user->id;
+
+
+            // check if swiped user also swiped on authenticated user
+
+            $matchingSwipe = Swipe::where('user_id',$swipedUserId)
+                                ->where('swiped_user_id',$authUserId)
+                                ->whereIn('type',['right','up'])->first();
+            if($matchingSwipe){
+                SwipeMatch::create([
+                    'swipe_id_1' => $swipe->id,
+                    'swipe_id_2' => $matchingSwipe->id
+                ]);
+            }
+
+            //show match found 
+        }
+
+
 
 
     }

@@ -552,7 +552,7 @@
                     <div class="text-3xl"> 👋 </div>
                     <div class="grid w-4/5">
                         <span class="font-bold text-sm text-green-800">Looking for  </span>
-                        <span class="text-lg text-green-800"> {{strtoupper(str_replace('_',' ' ,$user->relationship_goals->value))}} </span>
+                        <span class="text-lg text-green-800"> {{strtoupper(str_replace('_',' ' ,$user->relationship_goals?->value))}} </span>
 
                     </div>
                  </div>

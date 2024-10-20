@@ -22,4 +22,10 @@ class Swipe extends Model
     public function isSuperLike() : bool{
         return $this->type == 'up';
     }
+
+    public function match(){
+        return $this->hasOne(Swipe::class,'swipe_id_1')->orWhere('swipe_id_2',$this->getKey());
+    }
+
+
 }
