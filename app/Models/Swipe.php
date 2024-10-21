@@ -10,10 +10,9 @@ class Swipe extends Model
     /** @use HasFactory<\Database\Factories\SwipeFactory> */
     use HasFactory;
     protected $guarded = [];
-    public function users (){
-        return $this->belongsTo(User::class);
+    public function user (){
+        return $this->belongsTo(User::class,'user_id');
     }
-
     /* Representing user who was swiped */
     function swipedUser(){
         return $this->belongsTo(User::class,'swiped_user_id');
@@ -26,6 +25,7 @@ class Swipe extends Model
     public function match(){
         return $this->hasOne(Swipe::class,'swipe_id_1')->orWhere('swipe_id_2',$this->getKey());
     }
+    
 
 
 }

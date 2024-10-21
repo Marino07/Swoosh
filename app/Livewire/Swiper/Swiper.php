@@ -65,9 +65,12 @@ class Swiper extends Component
                     'swipe_id_1' => $swipe->id,
                     'swipe_id_2' => $matchingSwipe->id
                 ]);
+                $this->dispatch('match-found');
             }
 
-            //show match found 
+            //show match found
+
+
         }
 
 

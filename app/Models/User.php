@@ -119,8 +119,8 @@ class User extends Authenticatable
     public function matches()
     {
         return $this->hasManyThrough(
-            Swipe::class,
-            Swipe::class,
+            SwipeMatch::class, // ciljani model
+            Swipe::class, //model preko kojeg dolazimo da matcha za naseg usera
             'user_id',
             'swipe_id_1',
             'id',
