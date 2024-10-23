@@ -39,7 +39,7 @@
             @foreach ($matches as $key =>  $match)
 
 
-             <div class="relative">
+             <div wire:click="createConversation('{{$match->id}}')" class="relative cursor-pointer">
                  <!-- SVG ikona pozicionirana na gornjoj desnoj ivici slike -->
                  <span class="absolute -top-7 -right-7 ">
                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot text-red-500 w-16 h-16" viewBox="0 0 16 16">

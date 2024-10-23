@@ -658,9 +658,12 @@
     {{-- Match found --}}
     <div
 
-    x-data="{ modalOpen: false }"  @match-found.window="modalOpen = true" @keydown.escape.window="modalOpen = false"
+    x-data="{ modalOpen: false }"
+     @match-found.window="modalOpen = true"
+     @match-close.match.window="modalOpen = false"
+     @keydown.escape.window="modalOpen = false"
     class="relative z-50 w-auto h-auto">
-    
+
         <template x-teleport="body">
             <div x-show="modalOpen"
                 class="fixed top-0 left-0 z-[99] flex items-center justify-center w-screen h-screen" x-cloak>
@@ -719,7 +722,7 @@
                             {{--actions --}}
 
                             <div class="mx-auto flex flex-col gap-5">
-                                <button class="bg-tinder text-white font-bold items-center px-3 py-2 rounded-full">
+                                <button wire:click="createConversation" class="bg-tinder text-white font-bold items-center px-3 py-2 rounded-full">
                                     Send a message
 
                                 </button>

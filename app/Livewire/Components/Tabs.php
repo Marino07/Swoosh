@@ -3,12 +3,25 @@
 namespace App\Livewire\Components;
 
 use Livewire\Component;
+use App\Models\SwipeMatch;
+use App\Models\Conversation;
 
 class Tabs extends Component
 {
     public $matches;
     public function mount(){
         $this->matches = auth()->user()->matches;
+    }
+
+    public function createConversation(SwipeMatch $match){
+
+        $receiver = $match->swipe1->user_id == auth()->id() ? $match->swipe2->user_id : $match->swipe1->user_id;
+
+        Conversation::updateOrCreate([  'match_id' => $match->id,],[
+            'sender_id' => auth()->id(),
+            'receiver_id' => $receiver,
+        ]);
+
     }
 
 
