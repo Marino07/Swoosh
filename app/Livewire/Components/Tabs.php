@@ -8,9 +8,11 @@ use App\Models\Conversation;
 
 class Tabs extends Component
 {
+    public $conversations;
     public $matches;
     public function mount(){
         $this->matches = auth()->user()->matches;
+        $this->conversations = auth()->user()->conversations;
     }
 
     public function createConversation(SwipeMatch $match){

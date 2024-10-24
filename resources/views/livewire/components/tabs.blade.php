@@ -62,7 +62,9 @@
         {{--chats --}}
      <aside x-cloak x-show="tab=='2'">
          <ul>
-             @for ($i = 0; $i < 2; $i++)
+             @foreach ($conversations as $key => $con )
+
+
                  <li x-data="{ con: true, isToggled: false }">
                      <a @click="if (!isToggled) { con = !con; isToggled = true; }"
                         :class="con ? 'border-r-4 border-red-500 bg-white py-3' : ''"
@@ -76,15 +78,23 @@
                                      <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
                                  </svg>
                              </span>
-                             <x-avatar class="h-14 w-14" src="https://randomuser.me/api/portraits/women/{{$i+23}}.jpg"></x-avatar>
+                             <x-avatar class="h-14 w-14" src="https://randomuser.me/api/portraits/women/{{$key+23}}.jpg"></x-avatar>
                          </div>
                          <div class="overflow-hidden">
-                             <h6 class="font-bold truncate">{{ fake()->name }}</h6>
+                            <h6 class="font-bold truncate">
+                                @if(auth()->user()->is($con->match->swipe1->user))
+                                    {{ $con->match->swipe2->user->name }}
+                                @elseif(auth()->user()->is($con->match->swipe2->user))
+                                    {{ $con->match->swipe1->user->name }}
+                                @endif
+
+                            </h6>
+
                              <p class="text-gray-600 truncate">{{ fake()->text }}</p>
                          </div>
                      </a>
                  </li>
-             @endfor
+                 @endforeach
          </ul>
      </aside>
 
