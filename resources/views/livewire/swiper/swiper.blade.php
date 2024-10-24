@@ -683,7 +683,6 @@
 
                     {{--Header --}}
                     <div class=" items-center justify-between p-2 py-3 block">
-                        <h3 class="text-lg font-semibold">Modal Title</h3>
                         <button @click="modalOpen=false"
                             class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-5 mr-5 text-gray-600 rounded-full hover:text-gray-800 hover:bg-gray-50">
                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -732,7 +731,6 @@
 
                                 </button>
                             </div>
-
 
 
                     </main>

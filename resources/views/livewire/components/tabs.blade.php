@@ -1,7 +1,7 @@
 <div>
      {{--Tabs section --}}
      <section
-     x-data="{ tab: '2',}"
+     x-data="{ tab: {{request()->routeIs('chat.index') ? '2' : '1' }},}"
      @match-found.window="$wire.$refresh()"
      class="mb-auto overflow-y-auto overflow-x-scroll relative">
 

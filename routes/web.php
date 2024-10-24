@@ -1,11 +1,17 @@
 <?php
 
+use App\Livewire\Chat\Index;
 use App\Livewire\Home;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/','welcome');
 
-Route::get('/app',Home::class)->name('app')->middleware(['auth']);
+Route::get('/app',Home::class)->middleware(['auth'])->name('app');
+
+Route::get('/app/chat',Index::class)->middleware(['auth'])->name('chat.index');
+
+
+
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
