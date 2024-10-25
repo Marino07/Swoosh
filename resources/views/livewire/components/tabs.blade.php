@@ -1,7 +1,7 @@
 <div>
      {{--Tabs section --}}
      <section
-     x-data="{ tab: {{request()->routeIs('chat.index') ? '2' : '1' }},}"
+     x-data="{ tab: {{request()->routeIs('chat.index') || request()->routeIs('chat')  ? '2' : '1' }},}"
      @match-found.window="$wire.$refresh()"
      class="mb-auto overflow-y-auto overflow-x-scroll relative">
 
@@ -23,18 +23,18 @@
 
          <!-- Button for the "Chats" tab -->
          <button
-             @click="tab = '2'"
+             @click="tab = '2'; window.location.href='/app/chat';"
              :class="{ 'border-b-2 border-red-500' : tab === '2' }"
              class="font-bold text-sm px-2 pb-1.5">
              Chats
              <span class="rounded-full text-xs p-1 px-2 font-bold text-white bg-tinder">
-                 5
+                 {{auth()->user()->conversations->count()}}
              </span>
          </button>
 
      </header>
      {{--matches --}}
-     <aside class="px-2" x-show="tab=='1'">
+     <aside class="px-2" x-cloak x-show="tab=='1'">
          <div class="grid grid-cols-3 gap-2">
             @foreach ($matches as $key =>  $match)
 
@@ -60,7 +60,7 @@
 
 
         {{--chats --}}
-     <aside x-cloak x-show="tab=='2'">
+     <aside  x-cloak x-show="tab=='2'">
          <ul>
              @foreach ($conversations as $key => $con )
 
@@ -68,7 +68,7 @@
                  <li x-data="{ con: true, isToggled: false }">
                      <a @click="if (!isToggled) { con = !con; isToggled = true; }"
                         :class="con ? 'border-r-4 border-red-500 bg-white py-3' : ''"
-                        class="flex gap-4 items-center p-2" href="#">
+                        class="flex gap-4 items-center p-2" wire:navigate href="/app/chat/{{$con->id}}">
                          <div class="relative">
                              <span class="inset-y-0 my-auto absolute -right-7">
                                  <svg
@@ -88,7 +88,11 @@
                                     {{ $con->match->swipe1->user->name }}
                                 @endif
 
+                                {{-- opcionalno : {{auth()->user()->is($con->match->swipe1->user) ?
+                                 $con->match->swipe2->user->name : $con->match->swipe1->user->name}} --}}
+
                             </h6>
+
 
                              <p class="text-gray-600 truncate">{{ fake()->text }}</p>
                          </div>
