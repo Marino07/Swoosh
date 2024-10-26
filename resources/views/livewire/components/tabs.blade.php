@@ -23,7 +23,7 @@
 
          <!-- Button for the "Chats" tab -->
          <button
-             @click="tab = '2'; window.location.href='/app/chat';"
+             @click="tab = '2';"
              :class="{ 'border-b-2 border-red-500' : tab === '2' }"
              class="font-bold text-sm px-2 pb-1.5">
              Chats

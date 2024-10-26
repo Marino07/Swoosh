@@ -19,10 +19,11 @@ class Tabs extends Component
 
         $receiver = $match->swipe1->user_id == auth()->id() ? $match->swipe2->user_id : $match->swipe1->user_id;
 
-        Conversation::updateOrCreate([  'match_id' => $match->id,],[
+       $conversation = Conversation::updateOrCreate([  'match_id' => $match->id,],[
             'sender_id' => auth()->id(),
             'receiver_id' => $receiver,
         ]);
+        $this->redirect(route('chat', $conversation->id));
 
     }
 
