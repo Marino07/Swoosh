@@ -53,11 +53,12 @@
         </header>
 
         {{-- Body --}}
-        <section class="flex flex-col   gap-5  overflow-auto h-full  p-2.5  overflow-y-auto flex-grow  overflow-x-hidden w-full my-auto ">
+        <section class="flex flex-col   gap-2  overflow-auto h-full  p-2.5  overflow-y-auto flex-grow  overflow-x-hidden w-full my-auto ">
 
-            @for ($i = 0; $i < 20; $i++)
+            @foreach ($loadedMessages as $message)
+
             @php
-                $belongsToAuth= fake()->randomElement([true,false]);
+                $belongsToAuth= $message->sender_id == auth()->id();
             @endphp
 
                 <div @class([
@@ -69,7 +70,7 @@
                         'shrink-0 mt-auto',
                          'invisible'=>$belongsToAuth //SET true if belongs to auth
                         ])>
-                        <x-avatar class="h-7 w-7  " src="https://randomuser.me/api/portraits/women/{{$i+20}}.jpg" />
+                        <x-avatar class="h-7 w-7  " src="https://randomuser.me/api/portraits/women/{{rand(1,30)}}.jpg" />
                     </div>
 
                     {{-- message body --}}
@@ -79,19 +80,19 @@
                                 >
 
                         <p class="  whitespace-normal truncate text-sm md:text-base  tracking-wide lg:tracking-normal ">
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ullam quam nemo, reiciendis asperiores repellat animi, explicabo pariatur quasi neque possimus molestias cumque in necessitatibus commodi error maxime fuga exercitationem voluptates.
+                            {{$message->body}}
                         </p>
 
                     </div>
 
                 </div>
-                @endfor
+                @endforeach
         </section>
 
         {{-- Footer --}}
         <footer class=" sticky bottom-0 py-2 inset-x-0  p-2 ">
 
-                <form x-data="{body:@entangle('body')}" method="POST" {{--entagle for sync alpine and livewire --}}
+                <form x-data="{body:@entangle('body')}" @submit.prevent="$wire.sendMessage()" method="POST" {{--entagle for sync alpine and livewire --}}
                     autocapitalize="off">
                     @csrf
                     {{-- we put hidden inpu to prevent authcomplete --}}

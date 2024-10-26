@@ -10,9 +10,15 @@ class Tabs extends Component
 {
     public $conversations;
     public $matches;
-    public function mount(){
+    protected $listeners = ['new-message-created' => '$refresh', 'upt' => 'loadData'];
+    public function loadData()
+    {
         $this->matches = auth()->user()->matches;
-        $this->conversations = auth()->user()->conversations;
+        $this->conversations = auth()->user()->conversations()->latest('updated_at')->get();
+    }
+
+    public function mount(){
+        $this->loadData();
     }
 
     public function createConversation(SwipeMatch $match){

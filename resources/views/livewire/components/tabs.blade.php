@@ -94,7 +94,7 @@
                             </h6>
 
 
-                             <p class="text-gray-600 truncate">{{ fake()->text }}</p>
+                             <p class="text-gray-600 truncate">{{$con->messages()?->latest()->first()?->body }}</p>
                          </div>
                      </a>
                  </li>
