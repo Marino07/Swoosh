@@ -1,4 +1,20 @@
-<div class="flex h-screen overflow-hidden">
+<div
+x-data="{
+height:0,
+conversationElement: document.getElementById('conversation'),
+}"
+
+x-init = "
+height = conversationElement.scrollHeight;
+$nextTick(()=>{conversationElement.scrollTop=height});
+"
+
+@scroll-bottom.window = "$nextTick(()=>{conversationElement.scrollTop=conversationElement.scrollHeight
+                                        conversationElement.style.overflowY='hidden'
+                                        conversationElement.style.overflowY='auto'
+                                        })";
+                        "
+class="flex h-screen overflow-hidden">
 
     <main class="w-full grow border flex flex-col relative ">
 
@@ -53,7 +69,9 @@
         </header>
 
         {{-- Body --}}
-        <section class="flex flex-col   gap-2  overflow-auto h-full  p-2.5  overflow-y-auto flex-grow  overflow-x-hidden w-full my-auto ">
+        <section
+        id="conversation"
+        class="flex flex-col   gap-2  overflow-auto h-full  p-2.5  overflow-y-auto flex-grow  overflow-x-hidden w-full my-auto ">
 
             @foreach ($loadedMessages as $message)
 

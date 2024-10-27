@@ -46,6 +46,8 @@ class Chat extends Component
 
         $this->reset('body');
 
+        $this->dispatch('scroll-bottom');
+
         //push message
         $this->loadedMessages->push($createdMessage);
 
