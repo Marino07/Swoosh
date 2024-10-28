@@ -9,7 +9,7 @@ height = conversationElement.scrollHeight;
 $nextTick(()=>{conversationElement.scrollTop=height});
 "
 
-@scroll-bottom.window = "$nextTick(()=>{conversationElement.scrollTop=conversationElement.scrollHeight
+@scroll-bottom.window = "$nextTick(()=>{conversationElement.scrollTop=conversationElement.scrollHeight {{-- 0 is on top for scrollTop --}}
                                         conversationElement.style.overflowY='hidden'
                                         conversationElement.style.overflowY='auto'
                                         })";
@@ -70,6 +70,29 @@ class="flex h-screen overflow-hidden">
 
         {{-- Body --}}
         <section
+        @scroll="
+        scrollTop= $el.scrollTop;
+        console.log(scrollTop);
+        {{-- Note scrollbar/thumb is 0 at the op --}}
+        if(scrollTop<=0){
+           @this.dispatch('loadMore');
+        }
+        "
+
+
+       @update-height.window="
+       $nextTick(()=>{
+
+           newHeight=$el.scrollHeight;
+
+           oldHeight= height;
+
+           $el.scrollTop=newHeight-oldHeight;
+
+           height=newHeight;
+       });
+
+   "
         id="conversation"
         class="flex flex-col   gap-2  overflow-auto h-full  p-2.5  overflow-y-auto flex-grow  overflow-x-hidden w-full my-auto ">
 

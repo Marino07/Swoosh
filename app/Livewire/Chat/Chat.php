@@ -4,6 +4,7 @@ namespace App\Livewire\Chat;
 
 use App\Models\Message;
 use Livewire\Component;
+use Livewire\Attributes\On;
 use App\Models\Conversation;
 use App\Livewire\Components\Tabs;
 
@@ -14,7 +15,7 @@ class Chat extends Component
     public $receiver;
     public $body;
     public $loadedMessages;
-    public $paginate_var = 10;
+    public $paginate_var = 12;
     public function mount(){
         abort_unless(auth()->check(), 401);
         $this->conversation = Conversation::findOrFail($this->chat);
@@ -23,6 +24,12 @@ class Chat extends Component
                                 ->where('id', $this->conversation->id)
                                 ->exists();
         abort_unless($belongsToConversation, 401);
+
+        //mark messages as read
+        Message::where('conversation_id', $this->conversation->id)
+                ->where('receiver_id', auth()->id())
+                ->where('read_at', null)
+                ->update(['read_at' => now()]);
 
         //get receiver
         $this->receiver = $this->conversation->getReceiver();
@@ -60,6 +67,19 @@ class Chat extends Component
         $this->dispatch('new-message-created')->to(Tabs::class);
 
     }
+
+  #[On('loadMore')]
+  public function loadMore()
+  {
+      $totalMessages = Message::where('conversation_id', $this->conversation->id)->count();
+
+      // Prevent loading more than the total messages
+      if ($this->paginate_var < $totalMessages) {
+          $this->paginate_var += 10;
+          $this->loadMessages();
+          $this->dispatch('update-height'); // Update height after loading more
+      }
+  }
 
     public function loadMessages(){
         $count = Message::where('conversation_id', $this->conversation->id)

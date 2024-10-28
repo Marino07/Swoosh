@@ -3,7 +3,7 @@
      <section
      x-data="{ tab: {{request()->routeIs('chat.index') || request()->routeIs('chat')  ? '2' : '1' }},}"
      @match-found.window="$wire.$refresh()"
-     class="mb-auto overflow-y-auto overflow-x-scroll relative">
+     class="mb-auto overflow-y-auto h-full overflow-x-scroll relative">
 
      <!-- Header with buttons to switch between tabs -->
      <header class="flex items-center gap-5 mb-2 p-4 sticky top-0 bg-white z-10">
@@ -27,12 +27,15 @@
              :class="{ 'border-b-2 border-red-500' : tab === '2' }"
              class="font-bold text-sm px-2 pb-1.5">
              Chats
-             <span class="rounded-full text-xs p-1 px-2 font-bold text-white bg-tinder">
-                 {{auth()->user()->conversations->count()}}
-             </span>
+                @if (auth()->user()->unReadMessages() > 0)
+                <span class="rounded-full text-xs p-1 px-2 font-bold text-white bg-tinder">
+                    {{auth()->user()->unReadMessages()}}
+                </span>
+                @endif
          </button>
 
      </header>
+     <main class="h-full">
      {{--matches --}}
      <aside class="px-2" x-cloak x-show="tab=='1'">
          <div class="grid grid-cols-3 gap-2">
@@ -63,6 +66,9 @@
      <aside  x-cloak x-show="tab=='2'">
          <ul>
              @foreach ($conversations as $key => $con )
+             @php
+                 $lastMessage = $con->messages()->latest()->first();
+             @endphp
 
 
                  <li x-data="{ con: true, isToggled: false }">
@@ -94,14 +100,31 @@
                             </h6>
 
 
-                             <p class="text-gray-600 truncate">{{$con->messages()?->latest()->first()?->body }}</p>
+                             <p @class([
+                                'text-gray-600 truncate truncate gap-1 flex items-center',
+                                'font-semibold text-black' => !$lastMessage?->isRead() && $lastMessage?->sender_id != auth()->id(),
+                                'font-normal text-gray-600' => $lastMessage?->isRead() && $lastMessage?->sender_id != auth()->id(),
+                                'font-normal text-gray-600' => !$lastMessage?->isRead() && $lastMessage?->sender_id == auth()->id(),
+
+
+                             ])>
+
+                            @if($lastMessage?->sender_id == auth()->id())
+                            <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                              </svg>
+                              </span>
+                              @endif
+
+
+                                {{$con->messages()?->latest()->first()?->body }}</p>
                          </div>
                      </a>
                  </li>
                  @endforeach
          </ul>
      </aside>
-
+     </main>
 
  </section>
 </div>
