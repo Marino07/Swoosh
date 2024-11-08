@@ -7,6 +7,7 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Models\Conversation;
 use App\Livewire\Components\Tabs;
+use App\Notifications\MessageNotification;
 
 class Chat extends Component
 {
@@ -65,6 +66,10 @@ class Chat extends Component
         //dispatch
         $this->dispatch('upt')->to(Tabs::class);
         $this->dispatch('new-message-created')->to(Tabs::class);
+
+        //broadcasting
+        $this->receiver->notify(new MessageNotification($this->receiver,$createdMessage ,$this->conversation));
+
 
     }
 
