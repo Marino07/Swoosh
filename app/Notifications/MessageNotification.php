@@ -47,7 +47,7 @@ class MessageNotification extends Notification implements ShouldBroadcastNow
         return [
             'user_id' => $this->user->id,
             'conversation_id' => $this->conversation->id,
-            'message' => $this->message->body,
+            'message_id' => $this->message->id,
         ];
     }
 }

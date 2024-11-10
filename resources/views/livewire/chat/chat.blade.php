@@ -7,6 +7,15 @@ conversationElement: document.getElementById('conversation'),
 x-init = "
 height = conversationElement.scrollHeight;
 $nextTick(()=>{conversationElement.scrollTop=height});
+Echo.private('users.{{auth()->id()}}')
+    .notification((notification) => {
+        console.log('Notification received:', notification);
+        if(notification['type'] == 'App\\Notifications\\MessageNotification' && notification['conversation_id'] == {{$conversation->id}}){
+            console.log('usao');
+            console.log(notification['message_id']);
+            $wire.listenBroadcastedMessage(notification);
+        }
+    });
 "
 
 @scroll-bottom.window = "$nextTick(()=>{conversationElement.scrollTop=conversationElement.scrollHeight {{-- 0 is on top for scrollTop --}}

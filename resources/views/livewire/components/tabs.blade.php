@@ -2,6 +2,15 @@
      {{--Tabs section --}}
      <section
      x-data="{ tab: {{request()->routeIs('chat.index') || request()->routeIs('chat')  ? '2' : '1' }},}"
+    x-init="
+   Echo.private('users.{{auth()->id()}}')
+    .notification((notification) => {
+        if(notification['type'] == 'App\\Notifications\\MessageNotification'){
+
+            $wire.$refresh();
+        }
+    });
+    "
      @match-found.window="$wire.$refresh()"
      class="mb-auto overflow-y-auto h-full overflow-x-scroll relative">
 

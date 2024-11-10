@@ -17,6 +17,17 @@ class Chat extends Component
     public $body;
     public $loadedMessages;
     public $paginate_var = 12;
+    public function listenBroadcastedMessage($event){
+        $this->dispatch('scroll-bottom');
+        $newMessage = Message::find($event['message_id']);
+        // push
+        $this->loadedMessages->push($newMessage);
+
+        $newMessage->read_at = now();
+        $newMessage->save();
+        // refresh chat list
+        $this->dispatch('new-message-created');
+    }
     public function mount(){
         abort_unless(auth()->check(), 401);
         $this->conversation = Conversation::findOrFail($this->chat);

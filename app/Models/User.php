@@ -137,6 +137,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'receiver_id')->where('read_at', null)->count();
     }
+    public function receivesBroadcastNotificationsOn()
+    {
+        return 'users.'.$this->id;
+    }
 
 
 }
