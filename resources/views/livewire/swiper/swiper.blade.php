@@ -198,9 +198,9 @@
 
                     @php
                         $slides = [
-                            'https://randomuser.me/api/portraits/women/' . rand(1, 20) . '.jpg',
-                            'https://randomuser.me/api/portraits/women/' . rand(1, 20) . '.jpg',
-                            'https://randomuser.me/api/portraits/women/' . rand(1, 20) . '.jpg',
+                            'https://i.pravatar.cc/300' . rand(1,50),
+                            'https://i.pravatar.cc/300' . rand(1,50),
+                            'https://i.pravatar.cc/300' . rand(1,50),
                         ];
                     @endphp
 
@@ -427,9 +427,9 @@
 
                     @php
                         $slides = [
-                            'https://randomuser.me/api/portraits/women/' . rand(1, 20) . '.jpg',
-                            'https://randomuser.me/api/portraits/women/' . rand(1, 20) . '.jpg',
-                            'https://randomuser.me/api/portraits/women/' . rand(1, 20) . '.jpg',
+                            'https://i.pravatar.cc/300' . rand(1,50),
+                            'https://i.pravatar.cc/300' . rand(1,50),
+                            'https://i.pravatar.cc/300' . rand(1,50),
                         ];
                     @endphp
 

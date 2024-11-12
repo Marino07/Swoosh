@@ -45,6 +45,9 @@
 
      </header>
      <main class="h-full">
+        @php
+            $path = 'https://i.pravatar.cc/300' . rand(1, 50);
+        @endphp
      {{--matches --}}
      <aside class="px-2" x-cloak x-show="tab=='1'">
          <div class="grid grid-cols-3 gap-2">
@@ -58,7 +61,7 @@
                          <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
                      </svg>
                  </span>
-                 <img src="https://randomuser.me/api/portraits/women/{{$key+20}}.jpg" alt="Random face" class="h-36 rounded-lg object-cover">
+                 <img src="{{$path . $key+20}}" alt="Random face" class="h-36 rounded-lg object-cover">
                  <h5 class="absolute rounded-lg bottom-2 left-2 text-white font-bold text-xs">
                      {{ $match->swipe1->user != auth()->user() ? $match->swipe2->user->name : $match->swipe1->user->name }}
                  </h5>

@@ -35,10 +35,16 @@
                                 </span>
                             </sup>
                         </h3>
+
                         <a class="rounded-3xl bg-gradient-to-r from-pink-500 via-orange-500 to-rose-500 text-white text-xl font-bold px-8 py-2.5 max-w-fit mx-auto" href="{{route('register')}}">
                             Create account
                         </a>
+                        @guest
 
+                        <a class="mt-4 text-white text-xl bg-gradient-to-r from-pink-500 via-orange-500 to-rose-500 font-bold  rounded-full px-5 py-1" href="{{ route('login') }}">
+                            Login
+                        </a>
+                        @endguest
                     </center>
 
                 </div>
