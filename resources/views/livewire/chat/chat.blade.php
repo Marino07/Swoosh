@@ -42,8 +42,14 @@ class="flex h-screen overflow-hidden">
                 </span>
             </a>
 
+            {{-- avatar below --}}
 
-            <x-avatar />
+            <x-avatar src="https://i.pravatar.cc/300">
+
+            </x-avatar>
+
+
+
             <h5 class="font-bold text-gray-500 truncate">
                 {{$receiver->name}}
             </h5>
@@ -177,7 +183,7 @@ class="flex h-screen overflow-hidden">
 
             @php
             $slides=[
-                'https://randomuser.me/api/portraits/women/1.jpg'];
+                'https://i.pravatar.cc/300'];
             @endphp
 
             {{-- Carousel section --}}

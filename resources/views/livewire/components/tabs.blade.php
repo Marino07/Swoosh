@@ -1,7 +1,7 @@
 <div>
      {{--Tabs section --}}
      <section
-     x-data="{ tab: {{request()->routeIs('chat.index') || request()->routeIs('chat')  ? '2' : '1' }},}"
+     x-data="{ tab: '{{request()->routeIs('chat.index') || request()->routeIs('chat')  ? '2' : '1' }}',}"
     x-init="
    Echo.private('users.{{auth()->id()}}')
     .notification((notification) => {
@@ -10,8 +10,9 @@
             $wire.$refresh();
         }
     });
+
     "
-     @match-found.window="$wire.$refresh()"
+     @match-found.window="$wire.loadData()"
      class="mb-auto overflow-y-auto h-full overflow-x-scroll relative">
 
      <!-- Header with buttons to switch between tabs -->
@@ -46,7 +47,7 @@
      </header>
      <main class="h-full">
         @php
-            $path = 'https://i.pravatar.cc/300' . rand(1, 50);
+            $path = 'https://randomuser.me/api/portraits/women/';
         @endphp
      {{--matches --}}
      <aside class="px-2" x-cloak x-show="tab=='1'">
@@ -61,7 +62,7 @@
                          <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
                      </svg>
                  </span>
-                 <img src="{{$path . $key+20}}" alt="Random face" class="h-36 rounded-lg object-cover">
+                 <img src="{{$path . $key+45 . '.jpg'}}" alt="Random face" class="h-36 rounded-lg object-cover">
                  <h5 class="absolute rounded-lg bottom-2 left-2 text-white font-bold text-xs">
                      {{ $match->swipe1->user != auth()->user() ? $match->swipe2->user->name : $match->swipe1->user->name }}
                  </h5>
@@ -80,6 +81,7 @@
              @foreach ($conversations as $key => $con )
              @php
                  $lastMessage = $con->messages()->latest()->first();
+                 $path = 'https://i.pravatar.cc/300';
              @endphp
 
 
@@ -96,12 +98,12 @@
                                      <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
                                  </svg>
                              </span>
-                             <x-avatar class="h-14 w-14" src="https://randomuser.me/api/portraits/women/{{$key+23}}.jpg"></x-avatar>
+                             <x-avatar class="h-14 w-14" src="{{$path . $key}}"></x-avatar>
                          </div>
                          <div class="overflow-hidden">
                             <h6 class="font-bold truncate">
                                 @if(auth()->user()->is($con->match->swipe1->user))
-                                    {{ $con->match->swipe2->user->name }}
+                                    {{ $con->match->swipe2->user->name}}
                                 @elseif(auth()->user()->is($con->match->swipe2->user))
                                     {{ $con->match->swipe1->user->name }}
                                 @endif
