@@ -19,12 +19,13 @@ class DatabaseSeeder extends Seeder
             LanguageSeeder::class,
             LifestyleSeeder::class,
         ]);
-         $users = User::factory(10)->create();
+         $users = User::factory(20)->create();
 
          $tuser = User::factory()->create([
              'name' => 'Test User',
              'email' => 'test@example.com'
             ]);
+
 
             #create swipes for our test user
 
@@ -36,5 +37,6 @@ class DatabaseSeeder extends Seeder
 
 
             }
+
     }
 }

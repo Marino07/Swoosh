@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ env('APP_NAME') }}</title>
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -23,7 +23,7 @@
         <div class="flex flex-1 overflow-hidden">
 
             <!-- Sidebar: visible on large screens, hidden on small screens -->
-            <aside class=" md:flex flex-col bg-gray-100 sm:w-[22rem] w-full">
+            <aside class=" hidden md:flex flex-col bg-gray-100 sm:w-[22rem] w-full">
                 <header class="bg-tinder py-5 flex items-center p-2.5 sticky top-0">
                     {{--Avatar --}}
                     <x-avatar class="w-10 h-10"></x-avatar>
@@ -49,13 +49,11 @@
             </aside>
 
             <!-- Page Content -->
-            <main class="hidden flex-1 flex-col overflow-y-auto  md:flex">
+            <main class=" flex-1 flex-col overflow-y-auto  md:flex">
                 <!-- "You're logged in" or other main content -->
-                <div class="block md:hidden text-center text-2xl font-semibold">
-                    You're logged in
-                </div>
+
                 <!-- Slot content that will appear on larger screens -->
-                <div class="hidden md:block">
+                <div class=" md:block">
                     {{ $slot }}
                 </div>
             </main>

@@ -43,8 +43,12 @@ class="flex h-screen overflow-hidden">
             </a>
 
             {{-- avatar below --}}
+            @php
+            $base = 'https://randomuser.me/api/portraits/women/' . rand(10,20) . '.jpg';
 
-            <x-avatar src="https://i.pravatar.cc/300">
+            @endphp
+
+            <x-avatar src="{{$base}}">
 
             </x-avatar>
 
@@ -126,7 +130,7 @@ class="flex h-screen overflow-hidden">
                         'shrink-0 mt-auto',
                          'invisible'=>$belongsToAuth //SET true if belongs to auth
                         ])>
-                        <x-avatar class="h-7 w-7  " src="https://randomuser.me/api/portraits/women/{{rand(1,30)}}.jpg" />
+                        <x-avatar class="h-7 w-7  " src="{{$base}}" />
                     </div>
 
                     {{-- message body --}}
@@ -157,7 +161,11 @@ class="flex h-screen overflow-hidden">
                     <div class="grid grid-cols-12 items-center">
                         {{-- mssg icon --}}
                         <span class="col-span-1 pl-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" hidden h-8 w-8 lg:block">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+                              </svg>
+
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" block md:hidden h-8 w-8 ">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
                               </svg>
 
@@ -197,20 +205,7 @@ class="flex h-screen overflow-hidden">
                 </template>
 
                 {{-- pagination --}}
-                <div draggable="true" :class="{'hidden':slides.length==1}"
-                    class="absolute top-1 inset-x-0 z-10 w-full flex items-center justify-center">
 
-                    <template x-for="(image,index) in slides" :key="index">
-
-                        <button @click="activeSlide=index+1"
-                            :class="{'bg-white':activeSlide===index +1,'bg-gray-500':activeSlide !== index+1}"
-                            class="flex-1 w-4 h-2 mx-1 rounded-full overflow-hidden">
-
-                        </button>
-                    </template>
-
-
-                </div>
 
                 {{-- Prev button --}}
                 <button draggable="true" :class="{'hidden':slides.length==1}"
