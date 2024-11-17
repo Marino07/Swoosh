@@ -198,9 +198,9 @@
 
                     @php
                         $slides = [
-                            'https://i.pravatar.cc/300' . rand(1,50),
-                            'https://i.pravatar.cc/300' . rand(1,50),
-                            'https://i.pravatar.cc/300' . rand(1,50),
+                            'https://i.pravatar.cc/300?u=50' . $user->id,
+                            'https://i.pravatar.cc/300?u=50' . $user->id + 1,
+                            'https://i.pravatar.cc/300?u=50' . $user->id + 2,
                         ];
                     @endphp
 
@@ -426,10 +426,10 @@
 
 
                     @php
-                        $slides = [
-                            'https://i.pravatar.cc/300' . rand(1,50),
-                            'https://i.pravatar.cc/300' . rand(1,50),
-                            'https://i.pravatar.cc/300' . rand(1,50),
+                       $slides = [
+                            'https://i.pravatar.cc/300?u=50' . $user->id  ,
+                            'https://i.pravatar.cc/300?u=50' . $user->id + 1 ,
+                            'https://i.pravatar.cc/300?u=50' . $user->id  + 2,
                         ];
                     @endphp
 
@@ -711,10 +711,15 @@
 
                             <div class="flex items-center gap-4 mx-auto">
                                 <span>
-                                    <img src="https://randomuser.me/api/portraits/women/1.jpg" " alt="image" class="rounded-full h-32 w-32 ring ring-rose-300">
+                                    <img src="https://i.pravatar.cc/300?u=1304" alt="image" class="rounded-full h-32 w-32 ring ring-rose-300">
                                 </span>
                                 <span>
-                                    <img src="https://randomuser.me/api/portraits/women/2.jpg" " alt="image" class="rounded-full h-32 w-32 ring ring-rose-300">
+                                    @php
+                                    $sl = isset($user) ? 'https://i.pravatar.cc/300?u=50' . ($user->id + 1) : 'https://i.pravatar.cc/300?u=50';
+
+                                    @endphp
+
+                                    <img src="{{$sl ?? ''}}" alt="image" class="rounded-full h-32 w-32 ring ring-rose-300">
                                 </span>
                             </div>
 

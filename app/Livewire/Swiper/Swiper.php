@@ -101,7 +101,10 @@ class Swiper extends Component
     public function render()
     {
 
-        $users = User::limit(10)->whereNotSwiped()->where('id','<>',auth()->id())->get();
-        return view('livewire.swiper.swiper',['users' => $users]);
+        $user = User::whereNotSwiped()
+            ->where('id', '<>', auth()->id())
+            ->orderBy('created_at', 'desc') // Sortiramo po datumu kreiranja u opadajućem redosledu
+            ->get(); // Uzimamo prvog korisnika
+        return view('livewire.swiper.swiper',['users' => $user]);
     }
 }

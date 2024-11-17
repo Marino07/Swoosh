@@ -44,7 +44,7 @@ class="flex h-screen overflow-hidden">
 
             {{-- avatar below --}}
             @php
-            $base = 'https://randomuser.me/api/portraits/women/' . rand(10,20) . '.jpg';
+            $base = 'https://i.pravatar.cc/300?u=50' . rand(1,50);
 
             @endphp
 
@@ -190,8 +190,7 @@ class="flex h-screen overflow-hidden">
             class=" inset-0 overflow-y-auto overflow-hidden overscroll-contain  w-full  bg-white space-y-4">
 
             @php
-            $slides=[
-                'https://i.pravatar.cc/300'];
+            $slides=[$base,];
             @endphp
 
             {{-- Carousel section --}}
